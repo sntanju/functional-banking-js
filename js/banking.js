@@ -26,12 +26,21 @@ function updateTotalField(totalFieldId, amount){
     totalElement.innerText =previousTotal + amount;
 }
 
-function updateBalance(amount, isAdd){
+function getCurrentBalance(){
     const balanceTotal = document.getElementById('balance-total');
 
     const balanceTotalText = balanceTotal.innerText;
     const previousBalanceTotal = parseFloat(balanceTotalText);
+    return previousBalanceTotal;
+}
 
+function updateBalance(amount, isAdd){
+     const balanceTotal = document.getElementById('balance-total');
+
+    // const balanceTotalText = balanceTotal.innerText;
+    // const previousBalanceTotal = parseFloat(balanceTotalText);
+
+    const previousBalanceTotal = getCurrentBalance();
     if(isAdd == true){
         balanceTotal.innerText = previousBalanceTotal + amount;
     }
@@ -51,6 +60,12 @@ document.getElementById('deposit-button').addEventListener('click', function(){
     // const depositAmountText = depositInput.value;
     // const depositAmount = parseFloat(depositAmountText);
     const depositAmount = getInputValue('deposit-input');
+    if(depositAmount > 0){
+        updateTotalField('deposit-total',depositAmount);
+        updateBalance(depositAmount, true);
+
+    }
+})
 
     //console.log(depositAmount);
 
@@ -64,7 +79,7 @@ document.getElementById('deposit-button').addEventListener('click', function(){
 
     // depositTotal.innerText =previousDepositTotal + depositAmount;
 
-    updateTotalField('deposit-total',depositAmount);
+    // updateTotalField('deposit-total',depositAmount);
 
     // update balance 
 
@@ -75,7 +90,7 @@ document.getElementById('deposit-button').addEventListener('click', function(){
 
     // balanceTotal.innerText = previousBalanceTotal + depositAmount;
 
-    updateBalance(depositAmount, true);
+    // updateBalance(depositAmount, true);
 
     //console.log(depositTotalText);
 
@@ -83,7 +98,7 @@ document.getElementById('deposit-button').addEventListener('click', function(){
     //clear input field
     //depositInput.value = '';
 
-})
+// })
 
 //handle withdraw button
 
@@ -92,7 +107,15 @@ document.getElementById('withdraw-button').addEventListener('click', function(){
     // const withdrawAmountText = withdrawInput.value;
     // const withdrawAmount = parseFloat(withdrawAmountText);
     const withdrawAmount = getInputValue('withdraw-input');
-
+    const currentBalance = getCurrentBalance();
+    if(withdrawAmount > 0 && withdrawAmount < currentBalance){
+        updateTotalField('withdraw-total', withdrawAmount);
+        updateBalance(withdrawAmount, false);
+    }
+    if(withdrawAmount > currentBalance){
+        console.log('You can not withdraw more than what you have in your account');
+    }
+})
     //console.log(withdrawAmountText);
 
     //update withdraw total
@@ -105,7 +128,7 @@ document.getElementById('withdraw-button').addEventListener('click', function(){
 
     // withdrawTotal.innerText = previouswithdrawTotal + withdrawAmount;
 
-    updateTotalField('withdraw-total', withdrawAmount);
+    // updateTotalField('withdraw-total', withdrawAmount);
 
     //update balance total after withdraw
 
@@ -114,9 +137,9 @@ document.getElementById('withdraw-button').addEventListener('click', function(){
     // const previonusBalanceTotal = parseFloat(balanceTotalText);
     // balanceTotal.innerText = previonusBalanceTotal - withdrawAmount; 
 
-    updateBalance(withdrawAmount, false);
+    // updateBalance(withdrawAmount, false);
 
 
     //clear withdraw input field
     //withdrawInput.value = '';
-})
+// })
